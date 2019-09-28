@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Roulette Game" />
+        <meta name="author" content="Michela Federico">
+        <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta id="theme-color" name="theme-color" content="#bf2323">
+        <meta charset="utf-8">
+
+        <base target="_blank">
+
+        <title>Roulette</title>
+
+        <link rel="stylesheet" href="css/main.css" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=EB+Garamond|Raleway:300,400,500,600,700,800&display=swap" rel="stylesheet">
+
+        <script type="text/javascript" src="js/utils.js"></script>
+        <script type="text/javascript" src="js/consts.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
+    </head>
+
+    <body>
+        <main>
+            <!-- GAME PAGE: uncover two cards at the time to find a match until the whole grid is uncovered -->
+            <section id="gameSection" class="flexi-section">
+                <div class="container">
+                    <div id="gameHeader" class="row">
+                        <h1 class="gameName">Roulette</h1>
+                    </div>
+                    <div id="gameContainer" class="row">
+                        <div class="row">
+                            <div class="col" id="wheelContainer">
+                                <div class="pointer"></div>
+                                <div class="wheel"></div>
+                            </div>
+                            <div class="col" id="betsContainer">
+                                <div class="row" id="chips"></div>
+                                <div class="row" id="carpet"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="payout"></div>
+                            <div id="balance"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FOOTER: get in touch with the creator of this game -->
+            <footer>
+                <div class="row">
+                    <a href="http://michelafederico.co.uk/portfolio" target="_blank" title="Michela Federico Portfolio">
+                        <img src="images/logo_v1.svg" title="Michela Federico Logo" class="logo">
+                    </a>
+                </div>
+                <div class="row">
+                    <div class="social-link">
+                        <a href="https://github.com/federicomichela/MemoryGame" title="View source for this page on GitHub" id="viewSource"><i class="fab fa-github-alt"></i></a>
+                    </div>
+                    <div class="social-link">
+                        <a href="https://jsfiddle.net/user/irith/fiddles/" target="_blank" title="gplus"><i class="fab fa-jsfiddle"></i></a>
+                    </div>
+                    <div class="social-link">
+                        <a href="https://www.linkedin.com/in/michela-federico/" target="_blank" title="gplus"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    <div class="social-link">
+                        <a href="https://twitter.com/MichelaFederico" target="_blank" title="twitter"><i class="fab fa-twitter"></i></a>
+                    </div>
+                    <div class="social-link">
+                        <a href="https://www.facebook.com/federico.michela" target="_blank" title="facebook"><i class="fab fa-facebook-f"></i></a>
+                    </div>
+                    <div class="social-link">
+                        <a href="https://www.instagram.com/michela.zakir/" target="_blank" title="instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+                    <div class="social-link">
+                        <a href="mailto:federico.michela@gmail.com" target="_blank" title="mail"><i class="fas fa-at"></i></a>
+                    </div>
+                </div>
+                <div class="row">
+                    Made by me &nbsp;<i class="far fa-copyright mirror"></i>&nbsp;2019
+                </div>
+            </footer>
+        </main>
+    </body>
+</html>

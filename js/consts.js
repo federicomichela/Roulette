@@ -1,0 +1,1 @@
+SEGMENTS_NUM = 38;
