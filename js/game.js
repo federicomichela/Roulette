@@ -20,8 +20,10 @@ class Roulette {
             this._selectChip(event)
         }
         if (["td", "th"].indexOf(event.target.tagName.toLowerCase()) > -1) {
-            if (event.target.querySelector(".bet")) {
-                this._addBet(event);
+            if (event.target.parentElement.parentElement.parentElement.classList.contains("active")) {
+                if (event.target.querySelector(".bet")) {
+                    this._addBet(event);
+                }
             }
         }
     }
@@ -117,6 +119,9 @@ class Roulette {
         this._balance -= this._betsTotal;
         this._updateGameInfos();
 
+        // disable table to prevent additional bets to be placed
+        document.querySelector("#carpet table").classList.remove("active");
+
         // DEBUGGING PURPOSES
         console.info(randomNumber);
         console.info(this._map[randomNumber]);
@@ -130,6 +135,7 @@ class Roulette {
     }
 
     _computeWin() {
-
+        // re-enable table to allow player to place bets
+        document.querySelector("#carpet table").classList.add("active");
     }
 }

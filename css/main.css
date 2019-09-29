@@ -163,7 +163,7 @@ table tr:nth-last-child(2) { font-size: 1.5em; }
 
 .chip.selected,
 #carpet table.active tr td:hover,
-#carpet table.active tr th:hover {
+#carpet table.active tr th:not(.hide):hover {
 	transform: scale(1.2);
 	transition: all .2s ease-in-out;
 }

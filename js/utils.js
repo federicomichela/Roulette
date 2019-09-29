@@ -32,7 +32,7 @@ function getRandomInt(min, max) {
  * @returns {Number}
  */
 function getCurrentRotation(element) {
-    let style = window.getComputedStyle(el, null);
+    let style = window.getComputedStyle(element, null);
     let transformValue = style.getPropertyValue("-webkit-transform") ||
                         style.getPropertyValue("-moz-transform") ||
                         style.getPropertyValue("-ms-transform") ||
