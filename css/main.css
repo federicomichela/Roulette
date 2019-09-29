@@ -75,6 +75,37 @@ section .container {
 	height: 100%;
 }
 
+#carpet {
+	overflow-x: auto;
+	justify-content: unset;
+	background-color: #218964;
+	padding: 10px;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	color: white;
+}
+
+table tr td,
+table tr th {
+	border: 3px solid #133826;
+	padding: 5px 20px;
+}
+table tr th {
+	background-color: #25a471;
+	font-weight: normal;
+}
+table tr th.hide {
+	border-width: 0px;
+	background-color: #218964;
+}
+table tr td.even { background-color: black; }
+table tr td.odd { background-color: red; }
+
+table tr:nth-last-child(2) { font-size: 1.5em; }
+
 .col {
 	display: flex;
 	flex-direction: column;
@@ -109,7 +140,8 @@ section .container {
     background-color: transparent;
     border-left: 16px solid transparent;
     border-right: 16px solid transparent;
-    border-top: 170px solid black;
+    border-top-style: solid;
+	border-top-color: black;
     box-sizing: border-box;
 }
 .wheel .segment:nth-child(even) { border-top-color: red; }
@@ -125,7 +157,6 @@ section .container {
   -webkit-transform: scale(1, 1.8);
           transform: scale(1, 1.8);
   position: absolute;
-  top: -170px;
   left: -16px;
 }
 
@@ -138,6 +169,19 @@ section .container {
   }
 }
 
+@media screen and (max-width: 768px) {
+	.col { width: 100%; }
+
+	.wheel .segment .number { top: -150px; }
+	.wheel .segment { border-top-width: 150px; }
+}
 @media screen and (min-width: 768px) {
 	section .container { width: 768px; }
+
+	.wheel .segment .number { top: -170px; }
+	.wheel .segment { border-top-width: 170px; }
+
+	table tr,
+	table tr td { padding: 5px 15px; };
+	}
 }
