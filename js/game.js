@@ -103,7 +103,7 @@ class Roulette {
             duration: duration
         };
 
-        this._result = "20"//this._map[randomNumber];
+        this._result = this._map[randomNumber];
 
         // spin wheel
         setTimeout(this._onWheelSpinCompleted.bind(this, rotation), duration);
@@ -169,10 +169,44 @@ class Roulette {
                             }
                         } else {
                             let numbers = RANGE_GROUPS[groupId];
+                            let bets = [];
 
-                            if (numbers.includes(parseInt(this._result))) {
-                                payout += bet;
+                            switch (groupId) {
+                                case "range0":
+                                    bets = [...document.querySelectorAll(`#carpet table tr:nth-child(0) td .bet`)];
+                                    break;
+                                case "range1":
+                                    bets = [...document.querySelectorAll(`#carpet table tr:nth-child(1) td .bet`)];
+                                    break;
+                                case "range2":
+                                    bets = [...document.querySelectorAll(`#carpet table tr:nth-child(2) td .bet`)];
+                                    break;
+                                case "range3":
+                                    bets = [...document.querySelectorAll("#carpet table td .bet")].slice(0, 12);
+                                    break;
+                                case "range4":
+                                    bets = [...document.querySelectorAll("#carpet table td .bet")].slice(12, 24);
+                                    break;
+                                case "range5":
+                                    bets = [...document.querySelectorAll("#carpet table td .bet")].slice(24, 36);
+                                    break;
+                                case "range6":
+                                    bets = [...document.querySelectorAll("#carpet table td .bet")].slice(0, 18);
+                                    break;
+                                case "range7":
+                                case "range9":
+                                    bets = [...document.querySelectorAll("#carpet table td:nth-child(odd) .bet")];
+                                    break;
+                                case "range8":
+                                case "range10":
+                                    bets = [...document.querySelectorAll("#carpet table td:nth-child(even) .bet")];
+                                    break;
+                                case "range11":
+                                    bets = [...document.querySelectorAll("#carpet table td .bet")].slice(18, 36);
+                                    break;
                             }
+
+                            payout += this._getBetsTotal(bets) * bet;
                         }
                     }
                 }
@@ -223,7 +257,7 @@ class Roulette {
         let previousBet = this._betPlaceOnTarget(target.previousElementSibling);
         let targetBet = this._betPlaceOnTarget(target);
         let nextBet = this._betPlaceOnTarget(target.nextElementSibling);
-        let afterNextBet = this._betPlaceOnTarget(target.nextElementSibling);
+        let afterNextBet = this._betPlaceOnTarget(target.nextElementSibling.nextElementSibling);
 
         return (previousBet && targetBet && nextBet) || (targetBet && nextBet && afterNextBet);
     }
@@ -234,5 +268,16 @@ class Roulette {
         let nextBet = this._betPlaceOnTarget(target.nextElementSibling);
 
         return (previousBet && targetBet) || (targetBet && nextBet);
+    }
+
+    _getBetsTotal(bets) {
+        let total = 0;
+
+        bets.forEach(bet => {
+            let betValue = parseFloat(bet.innerText.split("+")[1]) || 0;
+            total += betValue;
+        });
+
+        return total;
     }
 }

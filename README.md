@@ -1,9 +1,18 @@
 # Roulette
 
 2D very basic implementation of Roulette.
-Select chips, place bets and ...good luck!
+Click on a chip and select multiplet bets on the carpet.
+Once a bet is placed the player will no longer be able to place bet until
+the current bet pays out.
+
+*Pay table*
+- 0, 00, single number: 35 to 1
+- even, odd, 1/3, 1/2, black, red: 1 to 1
+- three consecutive numbers: 11 to 1 (place a bet on 3 numbers in a row)
+- three consecutive numbers: 17 to 1 (place a bet on 2 numbers in a row)
 
 This projects features es6, html5 and css3.
+
 
 ## To Run: ##
 
