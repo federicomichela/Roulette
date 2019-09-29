@@ -9,6 +9,9 @@ class Roulette {
         this._result;
     }
 
+    /**
+     * Draw the wheel, set the game infos and add listeners to click events
+     */
     initialiseGame() {
         // draw the wheel
         this._renderWheel();
@@ -23,6 +26,13 @@ class Roulette {
         document.querySelector("#placeBetBtn").addEventListener("click", this._placeBet.bind(this));
     }
 
+    /**
+     * If a chip or a bet on the carpet are selected,
+     * trigger the appropriate callback
+     *
+     * @param {Object} event
+     * @private
+     */
     _dispatchEvent(event) {
         if (event.target.classList.contains("chip")) {
             this._selectChip(event)
@@ -36,6 +46,12 @@ class Roulette {
         }
     }
 
+    /**
+     * Draw all the segments of the wheel
+     * TODO: draw pointer at the top of the wheel
+     *
+     * @private
+     */
     _renderWheel() {
         for (let i=0; i < SEGMENTS_NUM; i++) {
             let segment = document.createElement("div");
@@ -54,6 +70,12 @@ class Roulette {
         }
     }
 
+    /**
+     * Select a chip
+     *
+     * @param {Object} event
+     * @private
+     */
     _selectChip(event) {
         let chip = event.target;
         let allChips = [...document.getElementsByClassName("chip")];
@@ -68,6 +90,12 @@ class Roulette {
         }
     }
 
+    /**
+     * Update the bet total
+     *
+     * @param {Object} event
+     * @private
+     */
     _addBet(event) {
         let target = event.target;
         let chipSelected = document.querySelector(".chip.selected");
@@ -88,6 +116,14 @@ class Roulette {
         document.querySelector("#betTotal span").innerText = this._betsTotal.formatCurrency();
     }
 
+    /**
+     * Start the wheel spin animation,
+     * update the balance by deducting the placed bet and
+     * disable the carpet to prevent player from submitting new bets once
+     * wheel starts spinning.
+     *
+     * @private
+     */
     _placeBet() {
         // start wheel spin
         let randomNumber = getRandomInt(0, this._map.length);
@@ -119,12 +155,14 @@ class Roulette {
 
         // disable table to prevent additional bets to be placed
         document.querySelector("#carpet table").classList.remove("active");
-
-        // DEBUGGING PURPOSES
-        console.info(randomNumber);
-        console.info(this._map[randomNumber]);
     }
 
+    /**
+     * Update the wheel position and calculate the win
+     *
+     * @param {Number} rotation
+     * @private
+     */
     _onWheelSpinCompleted(rotation) {
         // update wheel position
         this._wheel.style.transform = `rotateZ(${rotation}deg)`;
@@ -132,6 +170,12 @@ class Roulette {
         this._computeWin();
     }
 
+
+    /**
+     * Calculate payout
+     *
+     * @private
+     */
     _computeWin() {
         let allBets = [...document.querySelectorAll(".bet")];
         let payout = 0;
@@ -217,6 +261,11 @@ class Roulette {
         this._gameCompleteRequest();
     }
 
+    /**
+     * Update payout and balance
+     *
+     * @private
+     */
     _gameCompleteRequest() {
         if (this._payout) {
             document.querySelector("#payout span").innerText = this._payout.formatCurrency();
@@ -230,6 +279,12 @@ class Roulette {
         }
     }
 
+    /**
+     * reset game infos, reset bets on carpet and re-activate the Carpet
+     * to enable the player to place new bets
+     *
+     * @private
+     */
     _onGameCompleted() {
         let allBets = [...document.querySelectorAll(".bet")];
 
@@ -249,27 +304,55 @@ class Roulette {
         document.querySelector("#carpet table").classList.add("active");
     }
 
-    _betPlaceOnTarget(target) {
+    /**
+     * Check whether or not a bet was placed on that target.
+     *
+     * @param {DOMElement} target
+     * @private
+     * @returns {Boolean}
+     */
+    _betPlacedOnTarget(target) {
         return Boolean(target.querySelector(".bet").innerText.length);
     }
 
+    /**
+     * Check whether or not a bet was placed on three consecutive numbers
+     *
+     * @param {DOMElement} target
+     * @private
+     * @returns {Boolean}
+     */
     _isThreeConsecutives(target) {
-        let previousBet = this._betPlaceOnTarget(target.previousElementSibling);
-        let targetBet = this._betPlaceOnTarget(target);
-        let nextBet = this._betPlaceOnTarget(target.nextElementSibling);
-        let afterNextBet = this._betPlaceOnTarget(target.nextElementSibling.nextElementSibling);
+        let previousBet = this._betPlacedOnTarget(target.previousElementSibling);
+        let targetBet = this._betPlacedOnTarget(target);
+        let nextBet = this._betPlacedOnTarget(target.nextElementSibling);
+        let afterNextBet = this._betPlacedOnTarget(target.nextElementSibling.nextElementSibling);
 
         return (previousBet && targetBet && nextBet) || (targetBet && nextBet && afterNextBet);
     }
 
+    /**
+     * Check whether or not a bet was placed on two consecutive numbers
+     *
+     * @param {DOMElement} target
+     * @private
+     * @returns {Boolean}
+     */
     _isTwoConsecutives(target) {
-        let previousBet = this._betPlaceOnTarget(target.previousElementSibling);
-        let targetBet = this._betPlaceOnTarget(target);
-        let nextBet = this._betPlaceOnTarget(target.nextElementSibling);
+        let previousBet = this._betPlacedOnTarget(target.previousElementSibling);
+        let targetBet = this._betPlacedOnTarget(target);
+        let nextBet = this._betPlacedOnTarget(target.nextElementSibling);
 
         return (previousBet && targetBet) || (targetBet && nextBet);
     }
 
+    /**
+     * Returns the total payout for a specific set of bets
+     *
+     * @param {Array} bets
+     * @private
+     * @returns {Number}
+     */
     _getBetsTotal(bets) {
         let total = 0;
 

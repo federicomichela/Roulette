@@ -23,6 +23,22 @@ function getRandomInt(min, max) {
 }
 
 /**
+ * Generate map for the symbols to allocate on the wheel.
+ * Places 0 at the beginning and 00 half way through.
+ */
+function generateWheelMap() {
+    let map = [];
+
+    for (let i=0; i < SEGMENTS_NUM - 1; i++) {
+        map.push(i.toString());
+    }
+
+    map.splice([Math.floor(SEGMENTS_NUM/2)], 0, "00");
+
+    return map;
+}
+
+/**
  * getCurrentRotation - Returns the rotation of an element in the DOM
  * in degrees.
  * (CREDITS: https://stackoverflow.com/questions/19574171/how-to-get-css-transform-rotation-value-in-degrees-with-javascript)
@@ -52,12 +68,24 @@ function getCurrentRotation(element) {
     return rotation;
 }
 
+/**
+ * Counts up from a value to a target.
+ *
+ * @param {DOMElement} targetElement
+ * @param {Number} start
+ * @param {Number} end
+ * @param {Number} duration
+ *
+ * @returns {type} Description
+ */
 function countUp(targetElement, start, end, duration) {
-    var range = end - start;
-    var current = start;
-    var increment = end > start? 1 : -1;
-    var stepTime = Math.abs(Math.floor(duration / range));
-    var timer = setInterval(function() {
+    duration = duration || 0;
+
+    let range = end - start;
+    let current = start;
+    let increment = end > start? 1 : -1;
+    let stepTime = Math.abs(Math.floor(duration / range));
+    let timer = setInterval(function() {
         current += increment;
         targetElement.innerText = current.formatCurrency();
         if (current == end) {
@@ -66,6 +94,16 @@ function countUp(targetElement, start, end, duration) {
     }, stepTime);
 }
 
+
+/**
+ * Prefixes the current number value with a currency symbol
+ * e.g £1000
+ *
+ * @param {String} locale
+ * @param {String} currency
+ *
+ * @returns {String}
+ */
 Number.prototype.formatCurrency = function(locale, currency) {
     locale = locale || "en_EN";
     currenty = currency || "GBP";

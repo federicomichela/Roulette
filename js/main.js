@@ -1,17 +1,8 @@
 var roulette;
 
-function generateWheelMap() {
-    let map = [];
-
-    for (let i=0; i < SEGMENTS_NUM - 1; i++) {
-        map.push(i.toString());
-    }
-
-    map.splice([Math.floor(SEGMENTS_NUM/2)], 0, "00");
-
-    return map;
-}
-
+/**
+ * Launch roulette game
+ */
 function initialiseGame() {
     let map = generateWheelMap();
     let wheelContainer = document.querySelector(".wheel");
