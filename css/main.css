@@ -75,11 +75,39 @@ section .container {
 	height: 100%;
 }
 
+#chips {
+	justify-content: space-evenly;
+    margin-bottom: 20px;
+}
+.chip {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 75px;
+	height: 75px;
+	border-radius: 50%;
+	color: white;
+	padding: 2px;
+}
+.chip-text {
+	width: 55px;
+	height: 55px;
+	border: 3px solid white;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.chip:nth-child(1) { background-color: #ec790e; }
+.chip:nth-child(2) { background-color: #021976; }
+.chip:nth-child(3) { background-color: #731e7b; }
+
 #carpet {
 	overflow-x: auto;
 	justify-content: unset;
 	background-color: #218964;
-	padding: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
 table {
@@ -119,7 +147,7 @@ table tr:nth-last-child(2) { font-size: 1.5em; }
 	flex-wrap: wrap;
 	justify-content: center;
 	align-items: center;
-	padding: 20px 0px;
+	padding: 10px 0px;
 }
 
 /** from: https://codepen.io/pder/pen/WYrRQm **/
