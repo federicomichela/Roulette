@@ -5,6 +5,7 @@ class Roulette {
         this._balance = BALANCE;
         this._bets = {};
         this._betsTotal = 0;
+        this._result;
     }
 
     initialiseGame() {
@@ -111,6 +112,8 @@ class Roulette {
             duration: duration
         };
 
+        this._result = "20"//this._map[randomNumber];
+
         // spin wheel
         setTimeout(this._onWheelSpinCompleted.bind(this, rotation), duration);
         this._wheel.animate(keyFrames, options);
@@ -135,7 +138,83 @@ class Roulette {
     }
 
     _computeWin() {
+        let allBets = [...document.querySelectorAll(".bet")];
+        let payout = 0;
+
+        allBets.forEach(betEntry => {
+            if (betEntry.innerText.length) {
+                if (betEntry.parentElement.tagName.toLowerCase() === "td") {
+                    let bet = parseFloat(betEntry.parentElement.innerText.split("+")[1]);
+
+                        if (Boolean(bet)) {
+                            let value = betEntry.parentElement.innerText.split("+")[0].trim();
+
+                            if (value === this._result) {
+                                if (this._isThreeConsecutives(betEntry.parentElement)) {
+                                    payout += bet * 11;
+                                } else if (this._isTwoConsecutives(betEntry.parentElement)) {
+                                    payout += bet * 17;
+                                } else {
+                                    payout += bet * 35;
+                                }
+                            }
+                        }
+                } else if (betEntry.parentElement.tagName.toLowerCase() === "th") {
+                    let bet = parseFloat(betEntry.parentElement.innerText.split("+")[1]);
+
+                    if (Boolean(bet)) {
+                        let groupId = betEntry.parentElement.id;
+                        let payX35 = this._is0r00(betEntry.parentElement);
+
+                        if (payX35) {
+                            payout += bet * 35;
+                        } else {
+                            let numbers = RANGE_GROUPS[groupId];
+
+                            if (numbers.includes(this._result)) {
+                                payout += bet;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
         // re-enable table to allow player to place bets
         document.querySelector("#carpet table").classList.add("active");
+
+        // reset the result and the bet
+        this._result = null;
+        this._betsTotal = 0;
+        this._balance += payout;
+        this._updateGameInfos({payout})
+
+        // reset all bets
+        allBets.forEach(betEntry => betEntry.innerText = "")
+    }
+
+    _betPlaceOnTarget(target) {
+        return Boolean(target.querySelector(".bet").innerText.length);
+    }
+
+    _isThreeConsecutives(target) {
+        let previousBet = this._betPlaceOnTarget(target.previousElementSibling);
+        let targetBet = this._betPlaceOnTarget(target);
+        let nextBet = this._betPlaceOnTarget(target.nextElementSibling);
+        let afterNextBet = this._betPlaceOnTarget(target.nextElementSibling);
+
+        return (previousBet && targetBet && nextBet) || (targetBet && nextBet && afterNextBet);
+    }
+
+    _isTwoConsecutives(target) {
+        let previousBet = this._betPlaceOnTarget(target.previousElementSibling);
+        let targetBet = this._betPlaceOnTarget(target);
+        let nextBet = this._betPlaceOnTarget(target.nextElementSibling);
+
+        return (previousBet && targetBet) || (targetBet && nextBet);
+    }
+
+    _is0r00(target) {
+        return ["0", "00"].includes(target.innerText.split("+")[0].trim());
     }
 }
