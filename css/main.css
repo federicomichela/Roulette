@@ -89,6 +89,10 @@ section .container {
 	color: white;
 	padding: 2px;
 }
+.chip:not(.selected):hover {
+	transition: all .2s ease-in-out;
+	font-size: 1.2em;
+}
 .chip-text {
 	width: 55px;
 	height: 55px;
@@ -97,6 +101,7 @@ section .container {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	pointer-events: none;
 }
 .chip:nth-child(1) { background-color: #ec790e; }
 .chip:nth-child(2) { background-color: #021976; }
@@ -114,6 +119,7 @@ table {
 	width: 100%;
 	border-collapse: collapse;
 	color: white;
+	font-size: 1.2em;
 }
 
 table tr td,
@@ -129,10 +135,38 @@ table tr th.hide {
 	border-width: 0px;
 	background-color: #218964;
 }
+table tr td.even,
+table tr td.odd { width: 50px; }
 table tr td.even { background-color: black; }
 table tr td.odd { background-color: red; }
 
 table tr:nth-last-child(2) { font-size: 1.5em; }
+
+.rhombus {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	pointer-events: none;
+}
+.rhombus div:nth-child(1) {
+	width: 15px;
+	height: 15px;
+	transform: rotate(45deg);
+}
+.rhombus.red div:nth-child(1)  { background-color: red; }
+.rhombus.black div:nth-child(1)  { background-color: black; }
+
+.bet {
+	font-size: 0.8em;
+	font-style: italic;
+}
+
+.chip.selected,
+#carpet table.active tr td:hover,
+#carpet table.active tr th:hover {
+	transform: scale(1.2);
+	transition: all .2s ease-in-out;
+}
 
 .col {
 	display: flex;
