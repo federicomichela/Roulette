@@ -188,13 +188,23 @@ table tr:nth-last-child(2) { font-size: 1.5em; }
   left: -16px;
 }
 
-@keyframes rotate{
-  0%{
-    transform:rotateZ(0deg);
-  }
-  100%{
-    transform:rotateZ(360deg);
-  }
+#gameInfos {
+	background-color: rgba(0,0,0, 0.5);
+	margin-bottom: 20px;
+	padding: 20px 0;
+	width: 100%;
+	color: white;
+	justify-content: space-between;
+}
+#balance { padding-left: 20px; }
+#payout { padding-right: 20px; }
+
+#placeBetBtn {
+	width: 200px;
+	padding: 10px;
+	border-radius: 10px;
+	border-color: black;
+	font-size: 1.2em;
 }
 
 @media screen and (max-width: 768px) {

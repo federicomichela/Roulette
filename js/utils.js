@@ -32,7 +32,7 @@ function getRandomInt(min, max) {
  * @returns {Number}
  */
 function getCurrentRotation(element) {
-    let style = window.getComputedStyle(element, null);
+    let style = window.getComputedStyle(el, null);
     let transformValue = style.getPropertyValue("-webkit-transform") ||
                         style.getPropertyValue("-moz-transform") ||
                         style.getPropertyValue("-ms-transform") ||
@@ -50,4 +50,11 @@ function getCurrentRotation(element) {
     }
 
     return rotation;
+}
+
+Number.prototype.formatCurrency = function(locale, currency) {
+    locale = locale || "en_EN";
+    currenty = currency || "GBP";
+
+    return this.toLocaleString('en-EN', { style: 'currency', currency: 'GBP' });
 }

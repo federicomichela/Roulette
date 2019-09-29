@@ -2,10 +2,12 @@ class Roulette {
     constructor(map, wheel) {
         this._map = map;
         this._wheel = wheel;
+        this._balance = BALANCE;
     }
 
     initialiseGame() {
         this._renderWheel();
+        this._updateGameInfos();
 
         document.querySelector("#placeBetBtn").addEventListener("click", this._placeBet.bind(this));
     }
@@ -26,6 +28,17 @@ class Roulette {
             segment.appendChild(number);
             this._wheel.appendChild(segment);
         }
+    }
+
+    _updateGameInfos(newBalance, newPayout) {
+        if (newBalance) {
+            this._balance = newBalance;
+        }
+
+        newPayout = newPayout || 0;
+
+        document.querySelector("#balance span").innerText = this._balance.formatCurrency();
+        document.querySelector("#payout span").innerText = newPayout.formatCurrency();
     }
 
     _placeBet() {
