@@ -86,6 +86,8 @@ section .container {
 	padding: 20px 0px;
 }
 
+/** from: https://codepen.io/pder/pen/WYrRQm **/
+#wheelContainer { width: 50%; }
 .wheel {
 	height: 350px;
 	position: relative;
@@ -120,6 +122,15 @@ section .container {
   position: absolute;
   top: -170px;
   left: -16px;
+}
+
+@keyframes rotate{
+  0%{
+    transform:rotateZ(0deg);
+  }
+  100%{
+    transform:rotateZ(360deg);
+  }
 }
 
 @media screen and (min-width: 768px) {
