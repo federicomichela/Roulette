@@ -5,13 +5,20 @@ class Roulette {
         this._balance = BALANCE;
         this._bets = {};
         this._betsTotal = 0;
+        this._payout = 0;
         this._result;
     }
 
     initialiseGame() {
+        // draw the wheel
         this._renderWheel();
-        this._updateGameInfos();
 
+        // update game infos
+        document.querySelector("#balance span").innerText = this._balance.formatCurrency();
+        document.querySelector("#betTotal span").innerText = this._betsTotal.formatCurrency();
+        document.querySelector("#payout span").innerText = this._payout.formatCurrency();
+
+        // add listeners
         document.addEventListener("click", this._dispatchEvent.bind(this));
         document.querySelector("#placeBetBtn").addEventListener("click", this._placeBet.bind(this));
     }
@@ -47,22 +54,6 @@ class Roulette {
         }
     }
 
-    _updateGameInfos(config) {
-        config = config || {};
-
-        let balance = config.balance || this._balance;
-        let bet = config.bet || this._betsTotal;
-        let payout = config.payout || 0;
-
-        if (this._balance != balance) {
-            this._balance = config.newBalance;
-        }
-
-        document.querySelector("#balance span").innerText = this._balance.formatCurrency();
-        document.querySelector("#betTotal span").innerText = bet.formatCurrency();
-        document.querySelector("#payout span").innerText = payout.formatCurrency();
-    }
-
     _selectChip(event) {
         let chip = event.target;
         let allChips = [...document.getElementsByClassName("chip")];
@@ -94,7 +85,7 @@ class Roulette {
         betOnTarget.innerText = `+${betOnTargetValue}`;
 
         this._betsTotal += betOnTargetValue;
-        this._updateGameInfos();
+        document.querySelector("#betTotal span").innerText = this._betsTotal.formatCurrency();
     }
 
     _placeBet() {
@@ -119,8 +110,12 @@ class Roulette {
         this._wheel.animate(keyFrames, options);
 
         // update balance
+        countUp (
+            document.querySelector("#balance span"),
+            this._balance,
+            this._balance-this._betsTotal,
+        500);
         this._balance -= this._betsTotal;
-        this._updateGameInfos();
 
         // disable table to prevent additional bets to be placed
         document.querySelector("#carpet table").classList.remove("active");
@@ -159,19 +154,23 @@ class Roulette {
                                 }
                             }
                         }
-                } else if (betEntry.parentElement.tagName.toLowerCase() === "th") {
+                }
+                if (betEntry.parentElement.tagName.toLowerCase() === "th") {
                     let bet = parseFloat(betEntry.parentElement.innerText.split("+")[1]);
 
                     if (Boolean(bet)) {
                         let groupId = betEntry.parentElement.id;
-                        let payX35 = this._is0r00(betEntry.parentElement);
+                        let value = betEntry.parentElement.innerText.split("+")[0].trim();
+                        let payX35 = ["0", "00"].includes(value);
 
                         if (payX35) {
-                            payout += bet * 35;
+                            if (value === this._result) {
+                                payout += bet * 35;
+                            }
                         } else {
                             let numbers = RANGE_GROUPS[groupId];
 
-                            if (numbers.includes(this._result)) {
+                            if (numbers.includes(parseInt(this._result))) {
                                 payout += bet;
                             }
                         }
@@ -180,17 +179,40 @@ class Roulette {
             }
         });
 
-        // re-enable table to allow player to place bets
-        document.querySelector("#carpet table").classList.add("active");
+        this._payout = payout;
+        this._gameCompleteRequest();
+    }
 
-        // reset the result and the bet
+    _gameCompleteRequest() {
+        if (this._payout) {
+            document.querySelector("#payout span").innerText = this._payout.formatCurrency();
+            countUp(
+                document.querySelector("#balance span"),
+                this._balance,
+                this._balance+this._payout,
+                5000
+            );
+            setTimeout(this._onGameCompleted.bind(this), 5000);
+        }
+    }
+
+    _onGameCompleted() {
+        let allBets = [...document.querySelectorAll(".bet")];
+
+        // reset match values
         this._result = null;
         this._betsTotal = 0;
-        this._balance += payout;
-        this._updateGameInfos({payout})
+        this._balance += this._payout;
+        this._payout = 0;
+
+        // update UI
+        document.querySelector("#payout span").innerText = this._payout.formatCurrency();
 
         // reset all bets
-        allBets.forEach(betEntry => betEntry.innerText = "")
+        allBets.forEach(betEntry => betEntry.innerText = "");
+
+        // re-enable table to allow player to place bets
+        document.querySelector("#carpet table").classList.add("active");
     }
 
     _betPlaceOnTarget(target) {
@@ -212,9 +234,5 @@ class Roulette {
         let nextBet = this._betPlaceOnTarget(target.nextElementSibling);
 
         return (previousBet && targetBet) || (targetBet && nextBet);
-    }
-
-    _is0r00(target) {
-        return ["0", "00"].includes(target.innerText.split("+")[0].trim());
     }
 }

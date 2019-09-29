@@ -52,6 +52,20 @@ function getCurrentRotation(element) {
     return rotation;
 }
 
+function countUp(targetElement, start, end, duration) {
+    var range = end - start;
+    var current = start;
+    var increment = end > start? 1 : -1;
+    var stepTime = Math.abs(Math.floor(duration / range));
+    var timer = setInterval(function() {
+        current += increment;
+        targetElement.innerText = current.formatCurrency();
+        if (current == end) {
+            clearInterval(timer);
+        }
+    }, stepTime);
+}
+
 Number.prototype.formatCurrency = function(locale, currency) {
     locale = locale || "en_EN";
     currenty = currency || "GBP";
