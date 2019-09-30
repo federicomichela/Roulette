@@ -258,6 +258,7 @@ table tr td.animate .bet.active {
 	width: 100%;
 	color: white;
 	justify-content: space-between;
+	flex-direction: column;
 }
 #balance { padding-left: 20px; }
 #payout { padding-right: 20px; }
@@ -274,13 +275,15 @@ table tr td.animate .bet.active {
 button:disabled { opacity: 0.7; }
 
 @media screen and (max-width: 768px) {
+	#gameInfos { flex-direction: row; }
+
 	.col { width: 100%; }
 
 	.wheel .segment .number { top: -150px; }
 	.wheel .segment { border-top-width: 150px; }
 }
 @media screen and (min-width: 768px) {
-	section .container { width: 768px; }
+	section .container { width: 80%; }
 
 	.wheel {
 		width: 340px;
@@ -292,4 +295,7 @@ button:disabled { opacity: 0.7; }
 	table tr,
 	table tr td { padding: 5px 15px; };
 	}
+}
+@media screen and (min-width: 1440px) {
+	section .container { width: 1152px; }
 }
