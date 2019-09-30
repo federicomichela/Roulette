@@ -64,6 +64,15 @@ class Roulette {
             segment.style.webkitTransform = `rotateZ(${size}deg)`;
             segment.style.transform = `rotateZ(${size}deg)`;
 
+            // set segment color
+            if (["0", "00"].includes(this._map[i])) {
+                segment.style.borderTopColor = "green";
+            } else if (parseInt(this._map[i]) % 2) {
+                segment.style.borderTopColor = "black";
+            } else {
+                segment.style.borderTopColor = "red";
+            }
+
             number.classList.add("number");
             number.textContent = this._map[i];
 

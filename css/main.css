@@ -209,12 +209,8 @@ table tr th .bet { pointer-events: none; }
     border-left: 16px solid transparent;
     border-right: 16px solid transparent;
     border-top-style: solid;
-	border-top-color: black;
     box-sizing: border-box;
 }
-.wheel .segment:nth-child(even) { border-top-color: red; }
-.wheel .segment:nth-child(20),
-.wheel .segment:nth-child(1) { border-top-color: green; }
 
 .wheel .segment .number {
   color: #fff;
