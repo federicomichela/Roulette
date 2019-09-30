@@ -124,6 +124,8 @@ class Roulette {
             betOnTargetValue = 0;
         }
 
+        betOnTarget.classList.add("active");
+
         betOnTargetValue += chipSelectedValue;
         betOnTarget.innerText = `+${betOnTargetValue}`;
 
@@ -161,11 +163,16 @@ class Roulette {
         this._betPlaced = true;
 
         this._result = this._map[randomNumber];
-        console.log(this._result)
 
         // spin wheel
         setTimeout(this._onWheelSpinCompleted.bind(this, rotation), duration);
         this._wheel.animate(keyFrames, options);
+
+        // reset win on carpet
+        if (document.querySelector(".win")) {
+            document.querySelector(".win").classList.remove("win");
+        }
+        [...document.querySelectorAll(".animate")].forEach(element => element.classList.remove("animate"));
 
         // reset payout if needed
         if (this._payout) {
@@ -191,7 +198,7 @@ class Roulette {
     }
 
     /**
-     * Update the wheel position and calculate the win
+     * Update the wheel position, highlightwin on carpet and calculate the win
      *
      * @param {Number} rotation
      * @private
@@ -199,6 +206,15 @@ class Roulette {
     _onWheelSpinCompleted(rotation) {
         // update wheel position
         this._wheel.style.transform = `rotateZ(${rotation}deg)`;
+
+        // highlight win on table
+        [...document.querySelectorAll("#carpet table tr td"),
+         ...document.querySelectorAll("#carpet table tr th:nth-child(1)"),
+         ...document.querySelectorAll("#carpet table tr th:nth-child(4)")].forEach(entry => {
+            if (entry.innerText.split("+")[0].trim() === this._result) {
+                entry.classList.add("win");
+            }
+        });
 
         this._computeWin();
     }
@@ -218,19 +234,21 @@ class Roulette {
                 if (betEntry.parentElement.tagName.toLowerCase() === "td") {
                     let bet = parseFloat(betEntry.parentElement.innerText.split("+")[1]);
 
-                        if (Boolean(bet)) {
-                            let value = betEntry.parentElement.innerText.split("+")[0].trim();
+                    if (Boolean(bet)) {
+                        let value = betEntry.parentElement.innerText.split("+")[0].trim();
 
-                            if (value === this._result) {
-                                if (this._isThreeConsecutives(betEntry.parentElement)) {
-                                    payout += bet * 11;
-                                } else if (this._isTwoConsecutives(betEntry.parentElement)) {
-                                    payout += bet * 17;
-                                } else {
-                                    payout += bet * 35;
-                                }
+                        if (value === this._result) {
+                            betEntry.parentElement.classList.add("animate");
+
+                            if (this._isThreeConsecutives(betEntry.parentElement)) {
+                                payout += bet * 11;
+                            } else if (this._isTwoConsecutives(betEntry.parentElement)) {
+                                payout += bet * 17;
+                            } else {
+                                payout += bet * 35;
                             }
                         }
+                    }
                 }
                 if (betEntry.parentElement.tagName.toLowerCase() === "th") {
                     let bet = parseFloat(betEntry.parentElement.innerText.split("+")[1]);
@@ -302,6 +320,7 @@ class Roulette {
 
                             if (update) {
                                 payout += bet;
+                                betEntry.parentElement.classList.add("animate");
                             }
                         }
                     }
@@ -367,9 +386,15 @@ class Roulette {
         // update UI
         document.querySelector("#betsTotal span").innerText = this._betsTotal.formatCurrency();
         document.querySelector("#payout span").innerText = this._payout.formatCurrency();
+        document.querySelector(".win").classList.remove("win");
+        [...document.querySelectorAll(".animate")].forEach(element => element.classList.remove("animate"));
 
         // reset all bets
-        allBets.forEach(betEntry => betEntry.innerText = "");
+        allBets.forEach(betEntry => {
+            betEntry.innerText = "";
+            betEntry.classList.remove("active");
+            betEntry.parentElement.classList.remove("animate");
+        });
 
         // re-enable table to allow player to place bets
         document.querySelector("#carpet table").classList.add("active");;

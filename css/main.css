@@ -88,10 +88,10 @@ section .container {
 	border-radius: 50%;
 	color: white;
 	padding: 2px;
-}
-.chip:not(.selected):hover {
 	transition: all .2s ease-in-out;
-	font-size: 1.2em;
+}
+.chip.selected {
+	transform: scale(1.2);
 }
 .chip-text {
 	width: 55px;
@@ -136,6 +136,8 @@ table tr th.hide {
 	background-color: #218964;
 }
 
+table tr td.win,
+table tr th.win { border: 5px solid gold; }
 table tr td.odd,
 table tr td.even { width: 50px; }
 
@@ -147,11 +149,28 @@ table tr:nth-last-child(2) { font-size: 1.5em; }
 table tr td .bet,
 table tr th .bet { pointer-events: none; }
 
+table tr th.animate,
+table tr td.animate {
+	animation: flash 1s linear 0.3s;
+}
+table tr th.animate .bet.active,
+table tr td.animate .bet.active {
+	background-color: green;
+	border-color: green;
+}
+
+@keyframes flash {
+	25% { opacity: 0; }
+	50% { opacity: 1; }
+	75% { opacity: 0; }
+}
+
 .rhombus {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	pointer-events: none;
+	margin: 10px;
 }
 .rhombus div:nth-child(1) {
 	width: 15px;
@@ -161,12 +180,20 @@ table tr th .bet { pointer-events: none; }
 .rhombus.red div:nth-child(1)  { background-color: red; }
 .rhombus.black div:nth-child(1)  { background-color: black; }
 
-.bet {
+.bet.active {
 	font-size: 0.8em;
 	font-style: italic;
+	margin: 0 auto;
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	border: 1px solid white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
-.chip.selected,
+.chip:hover,
 #carpet table.active tr td:hover,
 #carpet table.active tr th:not(.hide):hover {
 	transform: scale(1.2);
