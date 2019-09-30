@@ -139,7 +139,7 @@ class Roulette {
             duration: duration
         };
 
-        this._result = "11";//this._map[randomNumber];
+        this._result = this._map[randomNumber];
 
         // spin wheel
         setTimeout(this._onWheelSpinCompleted.bind(this, rotation), duration);
