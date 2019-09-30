@@ -18,7 +18,7 @@ class Roulette {
 
         // update game infos
         document.querySelector("#balance span").innerText = this._balance.formatCurrency();
-        document.querySelector("#betTotal span").innerText = this._betsTotal.formatCurrency();
+        document.querySelector("#betsTotal span").innerText = this._betsTotal.formatCurrency();
         document.querySelector("#payout span").innerText = this._payout.formatCurrency();
 
         // add listeners
@@ -113,7 +113,7 @@ class Roulette {
         betOnTarget.innerText = `+${betOnTargetValue}`;
 
         this._betsTotal += betOnTargetValue;
-        document.querySelector("#betTotal span").innerText = this._betsTotal.formatCurrency();
+        document.querySelector("#betsTotal span").innerText = this._betsTotal.formatCurrency();
     }
 
     /**
@@ -139,7 +139,7 @@ class Roulette {
             duration: duration
         };
 
-        this._result = this._map[randomNumber];
+        this._result = "11";//this._map[randomNumber];
 
         // spin wheel
         setTimeout(this._onWheelSpinCompleted.bind(this, rotation), duration);
@@ -214,43 +214,62 @@ class Roulette {
                         } else {
                             let numbers = RANGE_GROUPS[groupId];
                             let bets = [];
+                            let update = false;
 
                             switch (groupId) {
                                 case "range0":
                                     bets = [...document.querySelectorAll(`#carpet table tr:nth-child(0) td .bet`)];
+                                    update = RANGE_GROUPS["range0"].includes(parseInt(this._result));
                                     break;
                                 case "range1":
                                     bets = [...document.querySelectorAll(`#carpet table tr:nth-child(1) td .bet`)];
+                                    update = RANGE_GROUPS["range1"].includes(parseInt(this._result));
                                     break;
                                 case "range2":
                                     bets = [...document.querySelectorAll(`#carpet table tr:nth-child(2) td .bet`)];
+                                    update = RANGE_GROUPS["range2"].includes(parseInt(this._result));
                                     break;
                                 case "range3":
                                     bets = [...document.querySelectorAll("#carpet table td .bet")].slice(0, 12);
+                                    update = RANGE_GROUPS["range3"].includes(parseInt(this._result));
                                     break;
                                 case "range4":
                                     bets = [...document.querySelectorAll("#carpet table td .bet")].slice(12, 24);
+                                    update = RANGE_GROUPS["range4"].includes(parseInt(this._result));
                                     break;
                                 case "range5":
                                     bets = [...document.querySelectorAll("#carpet table td .bet")].slice(24, 36);
+                                    update = RANGE_GROUPS["range5"].includes(parseInt(this._result));
                                     break;
                                 case "range6":
                                     bets = [...document.querySelectorAll("#carpet table td .bet")].slice(0, 18);
+                                    update = RANGE_GROUPS["range6"].includes(parseInt(this._result));
                                     break;
                                 case "range7":
-                                case "range9":
                                     bets = [...document.querySelectorAll("#carpet table td:nth-child(odd) .bet")];
+                                    update = RANGE_GROUPS["range7"].includes(parseInt(this._result));
                                     break;
                                 case "range8":
+                                    bets = [...document.querySelectorAll("#carpet table td:nth-child(even) .bet")];
+                                    update = RANGE_GROUPS["range8"].includes(parseInt(this._result));
+                                    break;
+                                case "range9":
+                                    bets = [...document.querySelectorAll("#carpet table td:nth-child(odd) .bet")];
+                                    update = RANGE_GROUPS["range9"].includes(parseInt(this._result));
+                                    break;
                                 case "range10":
                                     bets = [...document.querySelectorAll("#carpet table td:nth-child(even) .bet")];
+                                    update = RANGE_GROUPS["range10"].includes(parseInt(this._result));
                                     break;
                                 case "range11":
                                     bets = [...document.querySelectorAll("#carpet table td .bet")].slice(18, 36);
+                                    update = RANGE_GROUPS["range11"].includes(parseInt(this._result));
                                     break;
                             }
 
-                            payout += this._getBetsTotal(bets) * bet;
+                            if (update) {
+                                payout += this._getBetsTotal(bets) * bet;
+                            }
                         }
                     }
                 }
@@ -297,7 +316,7 @@ class Roulette {
         this._payout = 0;
 
         // update UI
-        document.querySelector("#betTotal span").innerText = this._betsTotal.formatCurrency();
+        document.querySelector("#betsTotal span").innerText = this._betsTotal.formatCurrency();
         document.querySelector("#payout span").innerText = this._payout.formatCurrency();
 
         // reset all bets
