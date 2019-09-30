@@ -5,6 +5,9 @@ class Roulette {
         this._balance = BALANCE;
         this._betsTotal = 0;
         this._payout = 0;
+        this._firstBet = true;
+        this._gameComplete = false;
+        this._betPlaced = false;
         this._result;
     }
 
@@ -33,7 +36,7 @@ class Roulette {
      * @private
      */
     _dispatchEvent(event) {
-        if (event.target.classList.contains("chip")) {
+        if (event.target.classList.contains("chip") && !event.target.classList.contains("disabled")) {
             this._selectChip(event)
         }
         if (["td", "th"].indexOf(event.target.tagName.toLowerCase()) > -1) {
@@ -87,6 +90,10 @@ class Roulette {
         if (!table.classList.contains("active")) {
             table.classList.add("active");
         }
+
+        if (this._gameComplete) {
+            this._resetTable();
+        }
     }
 
     /**
@@ -113,6 +120,10 @@ class Roulette {
 
         this._betsTotal += chipSelectedValue;
         document.querySelector("#betsTotal span").innerText = this._betsTotal.formatCurrency();
+
+        if (this._firstBet) {
+            document.querySelector("#placeBetBtn").disabled = false;
+        }
     }
 
     /**
@@ -138,11 +149,20 @@ class Roulette {
             duration: duration
         };
 
+        this._betPlaced = true;
+
         this._result = this._map[randomNumber];
+        console.log(this._result)
 
         // spin wheel
         setTimeout(this._onWheelSpinCompleted.bind(this, rotation), duration);
         this._wheel.animate(keyFrames, options);
+
+        // reset payout if needed
+        if (this._payout) {
+            this._payout = 0;
+            document.querySelector("#payout span").innerText = this._payout.formatCurrency();
+        }
 
         // update balance
         countUp (
@@ -152,8 +172,13 @@ class Roulette {
         500);
         this._balance -= this._betsTotal;
 
-        // disable table to prevent additional bets to be placed
+        // disable place bet btn, table and chips to prevent additional bets to be placed
+        document.querySelector("#placeBetBtn").disabled = true;
         document.querySelector("#carpet table").classList.remove("active");
+        [...document.querySelectorAll(".chip")].forEach(chip => {
+            chip.classList.remove("selected");
+            chip.classList.add("disabled");
+        });
     }
 
     /**
@@ -267,7 +292,7 @@ class Roulette {
                             }
 
                             if (update) {
-                                payout += this._getBetsTotal(bets) * bet;
+                                payout += bet;
                             }
                         }
                     }
@@ -276,7 +301,7 @@ class Roulette {
         });
 
         this._payout = payout;
-        this._gameCompleteRequest();
+        this._gameCompleted();
     }
 
     /**
@@ -284,7 +309,9 @@ class Roulette {
      *
      * @private
      */
-    _gameCompleteRequest() {
+    _gameCompleted() {
+        this._gameComplete = true;
+
         if (this._payout) {
             document.querySelector("#payout span").innerText = this._payout.formatCurrency();
             countUp(
@@ -293,10 +320,22 @@ class Roulette {
                 this._balance+this._payout,
                 5000
             );
-            setTimeout(this._onGameCompleted.bind(this), 5000);
+            this._balance += this._payout;
+            setTimeout(this._startGame, 5000);
         } else {
-            this._onGameCompleted();
+            this._startGame();
         }
+    }
+
+    /**
+     * Re-enables chips selection and ability to place bet
+     *
+     * @private
+     */
+    _startGame() {
+        [...document.querySelectorAll(".chip")].forEach(chip => chip.classList.remove("disabled"));
+
+        document.querySelector("#placeBetBtn").disabled = false;
     }
 
     /**
@@ -305,7 +344,7 @@ class Roulette {
      *
      * @private
      */
-    _onGameCompleted() {
+    _resetTable() {
         let allBets = [...document.querySelectorAll(".bet")];
 
         // reset match values
@@ -313,6 +352,8 @@ class Roulette {
         this._betsTotal = 0;
         this._balance += this._payout;
         this._payout = 0;
+        this._betPlaced = false;
+        this._gameComplete = false;
 
         // update UI
         document.querySelector("#betsTotal span").innerText = this._betsTotal.formatCurrency();
@@ -322,7 +363,7 @@ class Roulette {
         allBets.forEach(betEntry => betEntry.innerText = "");
 
         // re-enable table to allow player to place bets
-        document.querySelector("#carpet table").classList.add("active");
+        document.querySelector("#carpet table").classList.add("active");;
     }
 
     /**
@@ -365,23 +406,5 @@ class Roulette {
         let nextBet = this._betPlacedOnTarget(target.nextElementSibling);
 
         return (previousBet && targetBet) || (targetBet && nextBet);
-    }
-
-    /**
-     * Returns the total payout for a specific set of bets
-     *
-     * @param {Array} bets
-     * @private
-     * @returns {Number}
-     */
-    _getBetsTotal(bets) {
-        let total = 0;
-
-        bets.forEach(bet => {
-            let betValue = parseFloat(bet.innerText.split("+")[1]) || 0;
-            total += betValue;
-        });
-
-        return total;
     }
 }

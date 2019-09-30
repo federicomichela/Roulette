@@ -135,10 +135,12 @@ table tr th.hide {
 	border-width: 0px;
 	background-color: #218964;
 }
-table tr td.even,
-table tr td.odd { width: 50px; }
-table tr td.even { background-color: black; }
-table tr td.odd { background-color: red; }
+
+table tr td.odd,
+table tr td.even { width: 50px; }
+
+table tr td.odd { background-color: black; }
+table tr td.even { background-color: red; }
 
 table tr:nth-last-child(2) { font-size: 1.5em; }
 
@@ -244,6 +246,9 @@ table tr th .bet { pointer-events: none; }
 	border-color: black;
 	font-size: 1.2em;
 }
+
+.disabled,
+button:disabled { opacity: 0.7; }
 
 @media screen and (max-width: 768px) {
 	.col { width: 100%; }
