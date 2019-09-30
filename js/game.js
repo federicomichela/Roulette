@@ -276,6 +276,8 @@ class Roulette {
                 5000
             );
             setTimeout(this._onGameCompleted.bind(this), 5000);
+        } else {
+            this._onGameCompleted();
         }
     }
 
@@ -295,6 +297,7 @@ class Roulette {
         this._payout = 0;
 
         // update UI
+        document.querySelector("#betTotal span").innerText = this._betsTotal.formatCurrency();
         document.querySelector("#payout span").innerText = this._payout.formatCurrency();
 
         // reset all bets
