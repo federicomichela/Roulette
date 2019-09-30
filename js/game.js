@@ -3,7 +3,6 @@ class Roulette {
         this._map = map;
         this._wheel = wheel;
         this._balance = BALANCE;
-        this._bets = {};
         this._betsTotal = 0;
         this._payout = 0;
         this._result;
@@ -112,7 +111,7 @@ class Roulette {
         betOnTargetValue += chipSelectedValue;
         betOnTarget.innerText = `+${betOnTargetValue}`;
 
-        this._betsTotal += betOnTargetValue;
+        this._betsTotal += chipSelectedValue;
         document.querySelector("#betsTotal span").innerText = this._betsTotal.formatCurrency();
     }
 
